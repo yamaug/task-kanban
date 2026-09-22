@@ -4,9 +4,9 @@ export async function register() {
   }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-  if (!supabaseUrl || !supabaseAnonKey) {
+  if (!supabaseUrl || !supabasePublishableKey) {
     console.error(
       "[Supabase] 接続確認をスキップしました: 環境変数が設定されていません",
     );
@@ -15,7 +15,7 @@ export async function register() {
 
   try {
     const response = await fetch(`${supabaseUrl}/auth/v1/health`, {
-      headers: { apikey: supabaseAnonKey },
+      headers: { apikey: supabasePublishableKey },
     });
 
     if (!response.ok) {

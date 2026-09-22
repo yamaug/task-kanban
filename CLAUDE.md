@@ -122,7 +122,7 @@ npx vitest run src/app/page.test.tsx
 
 ## Supabase接続設定
 
-- 環境変数は `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` を使用する。キー名は `.env.example` を参照し、実際の値は `.env.local` に記載する（`.env*` は `.gitignore` 対象のためコミットされない）。
+- 環境変数は `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` を使用する。キー名は `.env.example`（`.gitignore` の `.env*` から例外的に除外してコミットしている）を参照し、実際の値は `.env.local` に記載する（`.env.local` など `.env.example` 以外の `.env*` は `.gitignore` 対象のためコミットされない）。
 - Supabaseクライアントは `src/lib/supabase.ts` がエクスポートする `supabase`（`@supabase/supabase-js` の `createClient` で生成）を利用する。環境変数が未設定の場合は import 時に例外を投げる。
 - サーバー起動時の接続確認は `src/instrumentation.ts` の `register()` で行う（Next.js の Instrumentation 機能。`process.env.NEXT_RUNTIME === "nodejs"` の場合のみ実行され、Edge runtime では何もしない）。GoTrue のヘルスチェックエンドポイント（`${NEXT_PUBLIC_SUPABASE_URL}/auth/v1/health`）へ fetch し、環境変数未設定・レスポンス異常・例外の場合のみ `console.error` でログ出力する。正常時はログを出力しない（禁止事項の「console.logを本番コードに残さない」方針に合わせたもの）。
 - Supabase プロジェクトの情報確認（プロジェクトID・URL・APIキーなど）は Supabase MCP（`mcp__supabase__*` ツール）を使う。これは `.env.local` を読むのではなく、MCPサーバー自身が保持する認証情報でSupabaseの管理APIに直接アクセスする別経路であることに注意する。

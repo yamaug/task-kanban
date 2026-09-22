@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-`task-kanban` という名前の Next.js (App Router) プロジェクト。Supabase をバックエンドにしたタスク管理カンバンの基本機能（一覧表示・追加・編集・削除、ドラッグ&ドロップでのステータス変更）を実装済み。`src/app/page.tsx` は `create-next-app` のデフォルトスターターページのままで、カンバン本体は `/board`（`src/app/board/page.tsx`）にある。UI コンポーネントのベースとして shadcn/ui を導入済み（詳細は「shadcn/ui」セクション参照）。
+`task-kanban` という名前の Next.js (App Router) プロジェクト。Supabase をバックエンドにしたタスク管理カンバンの基本機能（一覧表示・追加・編集・削除、ドラッグ&ドロップでのステータス変更）を実装済み。`src/app/page.tsx` は宇宙ステーション風のスプラッシュページ（`/board` への導線）、カンバン本体は `/board`（`src/app/board/page.tsx`）にある。UI は shadcn/ui ベースで「宇宙ステーションのHUD」をイメージしたダーク固定デザインに統一済み（詳細は「shadcn/ui」「デザインルール」セクション参照）。
 
 ## よく使うコマンド
 
@@ -48,6 +48,36 @@ npx vitest run src/app/page.test.tsx
 - `cn` ユーティリティは `src/lib/utils.ts` が `cn` パッケージ（`class-variance-authority` と組み合わせて使う想定）から re-export したものを使う。クラス名の結合には独自実装せずこれを使うこと。
 - テーマ変数（色・角丸など）は `globals.css` の `:root`/`.dark` に OKLCH 値で定義され、`@theme inline` で Tailwind のユーティリティ（`bg-background`/`text-foreground` 等）にマッピングされている。色を変更する場合はこの CSS 変数側を編集し、コンポーネント個別に色をハードコードしないこと。
 - shadcn/ui・Tailwind の最新仕様は Context7 MCP（ライブラリ ID: `/websites/ui_shadcn`）で確認すること（MCP活用ルールに準拠）。
+- このプロジェクトの `Button`（`src/components/ui/button.tsx`）は Radix ではなく **`@base-ui/react/button`** ベース。Radix の `asChild` は存在しないため、他要素（`next/link` の `Link` 等）をボタン風に見せたい場合は次のいずれかを使うこと。
+  - リンクなど別要素として振る舞わせたいだけなら `buttonVariants({ variant, size, className })` を `import { buttonVariants } from "@/components/ui/button"` して対象要素の `className` に渡す（`src/app/page.tsx` の CTA リンクを参照）。
+  - `Button` 自体を別要素としてレンダリングしたい場合は `render={<Link href="...">...</Link>}` のように `render` prop に要素を渡す（base-ui の共通パターン。`Badge`/`Separator` など他の base-ui 系コンポーネントも同様）。ボタンの中身は `Button` の children ではなく `render` に渡す要素の children に書くこと。`<button>` 以外を描画する場合は `nativeButton={false}` を明示しないと開発時に警告が出るが、ネイティブなリンクとして振る舞わせたい（`role="link"` を維持したい）場合は `buttonVariants` 方式を優先し、`nativeButton={false}` で `role="button"` を上書きしないこと。
+
+## デザインルール
+
+宇宙ステーションのHUD（ヘッドアップディスプレイ）をイメージした、ダーク固定・エッジのきいたデザインで統一している。新規UIを追加・変更する際もこのトーンを踏襲すること。
+
+- **ダーク固定**：ライト/ダーク切り替えは実装しない（`next-themes` は導入しない）。`src/app/layout.tsx` の `<html>` に `className="dark"` を明示しており、`globals.css` の `:root` と `.dark` には同じ配色を持たせている（`.dark` クラスの有無に関わらず同じ見た目になる）。
+- **配色トークン**（`src/app/globals.css` の `:root`/`.dark`、OKLCH値）：
+  - `--background`/`--card`/`--popover` は深宇宙を思わせる紺〜黒系、`--foreground` は冷たい白。
+  - `--primary`/`--ring` はエレクトリックシアン（主要アクセント）。
+  - `--chart-1`＝アンバー（未着手 `todo`）、`--chart-2`＝シアン（進行中 `in_progress`）、`--chart-3`＝エメラルド（完了 `done`）。ステータスに紐づく色を追加する場合はこの3色を流用し、`TaskColumn.tsx` の `STATUS_ACCENT` のようなステータス→色のマッピングを1箇所にまとめること。
+  - `--destructive` は警報レッド/オレンジ。破壊的操作（削除確定など）には `Button`/`Badge`/`Alert` の `variant="destructive"` を使う。
+  - 色を追加・変更する場合は必ずこれらの CSS 変数側を編集し、コンポーネント側で色をハードコード（`bg-red-600` 等の直書き）しないこと。
+- **角丸**：`--radius: 0.3rem` とシャープ寄りに設定している。デフォルトの shadcn/ui コンポーネントが持つ角丸ユーティリティ（`rounded-*`）をそのまま使えば自動的にこの値に追従するため、個別コンポーネントで丸みを強める（`rounded-full`/`rounded-2xl` 等）のは特別な理由がない限り避けること。
+- **HUD装飾ユーティリティ**（`globals.css` の `@layer utilities` に定義。テキスト内容に影響しないため既存テストへの影響はない）：
+  - `.bg-starfield`：背景の星々の点描。ページ全体の背景（`main`/トップページの外枠）に使う。
+  - `.bg-hud-grid`：薄いグリッド線。パネルやページ背景に控えめに重ねる（`opacity-*` で不透明度を下げて使う）。
+  - `.glow-primary`/`.glow-ring`：シアン系のグロー。フォーカス時・ドラッグ中・強調したいCTAなど「今アクティブなもの」を示す用途に限定して使い、常時多用しない。
+  - `.text-glow`：見出し等に使う軽いテキストシャドウ。
+- **shadcn/uiコンポーネントの使い分け**：生の `<div>`/`<input>`/`<button>` 等を新たに書かず、既存導入済みの `Card`/`Input`/`Textarea`/`Label`/`Badge`/`Alert`/`Skeleton`/`Separator`/`Button`（`src/components/ui/`）を優先して使う。未導入のコンポーネントが必要な場合は `npx shadcn@latest add <component>` で追加する（「shadcn/ui」セクション参照）。
+  - フォーム系の validation エラーやユーザー向けエラーメッセージは `Alert variant="destructive"` + `AlertDescription` を使う（`role="alert"` が自動付与される）。
+  - ローディング状態はテキスト（例:「読み込み中...」）を残したまま `Skeleton` を併用し、テキストのみ・`Skeleton` のみのどちらか一方に倒さない。
+- **アイコン**：`lucide-react` を使う（`components.json` の `iconLibrary: "lucide"` に準拠）。装飾目的のアイコンは `aria-hidden` が自動で付く（lucide-react のデフォルト挙動）ため追加対応不要だが、アイコンのみのボタン（テキストなし）にする場合は必ず `aria-label` で意味の分かる文言を付けること。
+- **既存テストとの整合**：デザインを変更しても構わないが、以下は崩さないこと（詳細は「テスト」セクションのテストファイルを参照）。
+  - ボタン・ラベル・見出し・ステータス名・エラー文言などの日本語テキストとその対応関係（`<label htmlFor>`/`id`、ボタンの accessible name）。
+  - カウントバッジの数値はプレーンテキストとして描画する（`aria-label` のみに逃さない）。
+  - ドラッグ&ドロップの `useDroppable`/`useDraggable` の `id` とドラッグハンドル要素（`aria-label="ドラッグして移動"`）の構造。
+  - 見た目の変更（クラス名・DOM構造・装飾）自体はテストで縛られていないため自由に調整してよい。
 
 ## テスト
 

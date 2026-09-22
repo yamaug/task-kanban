@@ -7,17 +7,14 @@ describe("Home page", () => {
     render(<Home />);
 
     expect(
-      screen.getByText(/To get started, edit the/i)
+      screen.getByRole("heading", { name: "タスクカンバン" }),
     ).toBeInTheDocument();
   });
 
-  it("Documentation へのリンクが正しいURLを持つ", () => {
+  it("ボードへのリンクが正しいURLを持つ", () => {
     render(<Home />);
 
-    const link = screen.getByRole("link", { name: /documentation/i });
-    expect(link).toHaveAttribute(
-      "href",
-      expect.stringContaining("nextjs.org/docs")
-    );
+    const link = screen.getByRole("link", { name: /ボードを開く/ });
+    expect(link).toHaveAttribute("href", "/board");
   });
 });

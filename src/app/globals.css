@@ -48,73 +48,77 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/*
+  宇宙ステーションのHUD(ヘッドアップディスプレイ)をイメージしたダーク固定パレット。
+  ライト/ダーク切り替えは提供しないため :root と .dark に同じ値を持たせている。
+*/
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: oklch(0.16 0.02 250);
+  --foreground: oklch(0.95 0.01 240);
+  --card: oklch(0.2 0.025 250);
+  --card-foreground: oklch(0.95 0.01 240);
+  --popover: oklch(0.18 0.025 250);
+  --popover-foreground: oklch(0.95 0.01 240);
+  --primary: oklch(0.78 0.14 195);
+  --primary-foreground: oklch(0.15 0.02 250);
+  --secondary: oklch(0.27 0.02 250);
+  --secondary-foreground: oklch(0.95 0.01 240);
+  --muted: oklch(0.24 0.02 250);
+  --muted-foreground: oklch(0.68 0.02 245);
+  --accent: oklch(0.3 0.05 210);
+  --accent-foreground: oklch(0.95 0.01 240);
+  --destructive: oklch(0.68 0.19 25);
+  --border: oklch(0.95 0.03 210 / 14%);
+  --input: oklch(0.95 0.03 210 / 10%);
+  --ring: oklch(0.78 0.14 195 / 55%);
+  --chart-1: oklch(0.78 0.15 75);
+  --chart-2: oklch(0.78 0.14 195);
+  --chart-3: oklch(0.78 0.16 155);
+  --chart-4: oklch(0.72 0.19 300);
+  --chart-5: oklch(0.68 0.19 25);
+  --radius: 0.3rem;
+  --sidebar: oklch(0.18 0.025 250);
+  --sidebar-foreground: oklch(0.95 0.01 240);
+  --sidebar-primary: oklch(0.78 0.14 195);
+  --sidebar-primary-foreground: oklch(0.15 0.02 250);
+  --sidebar-accent: oklch(0.3 0.05 210);
+  --sidebar-accent-foreground: oklch(0.95 0.01 240);
+  --sidebar-border: oklch(0.95 0.03 210 / 14%);
+  --sidebar-ring: oklch(0.78 0.14 195 / 55%);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: oklch(0.16 0.02 250);
+  --foreground: oklch(0.95 0.01 240);
+  --card: oklch(0.2 0.025 250);
+  --card-foreground: oklch(0.95 0.01 240);
+  --popover: oklch(0.18 0.025 250);
+  --popover-foreground: oklch(0.95 0.01 240);
+  --primary: oklch(0.78 0.14 195);
+  --primary-foreground: oklch(0.15 0.02 250);
+  --secondary: oklch(0.27 0.02 250);
+  --secondary-foreground: oklch(0.95 0.01 240);
+  --muted: oklch(0.24 0.02 250);
+  --muted-foreground: oklch(0.68 0.02 245);
+  --accent: oklch(0.3 0.05 210);
+  --accent-foreground: oklch(0.95 0.01 240);
+  --destructive: oklch(0.68 0.19 25);
+  --border: oklch(0.95 0.03 210 / 14%);
+  --input: oklch(0.95 0.03 210 / 10%);
+  --ring: oklch(0.78 0.14 195 / 55%);
+  --chart-1: oklch(0.78 0.15 75);
+  --chart-2: oklch(0.78 0.14 195);
+  --chart-3: oklch(0.78 0.16 155);
+  --chart-4: oklch(0.72 0.19 300);
+  --chart-5: oklch(0.68 0.19 25);
+  --sidebar: oklch(0.18 0.025 250);
+  --sidebar-foreground: oklch(0.95 0.01 240);
+  --sidebar-primary: oklch(0.78 0.14 195);
+  --sidebar-primary-foreground: oklch(0.15 0.02 250);
+  --sidebar-accent: oklch(0.3 0.05 210);
+  --sidebar-accent-foreground: oklch(0.95 0.01 240);
+  --sidebar-border: oklch(0.95 0.03 210 / 14%);
+  --sidebar-ring: oklch(0.78 0.14 195 / 55%);
 }
 
 @layer base {
@@ -126,5 +130,43 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+/* 宇宙ステーション風のHUD装飾ユーティリティ */
+@layer utilities {
+  .bg-starfield {
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, oklch(0.95 0.01 240 / 60%) 0, transparent 60%),
+      radial-gradient(1px 1px at 32% 68%, oklch(0.95 0.01 240 / 45%) 0, transparent 60%),
+      radial-gradient(1.5px 1.5px at 58% 12%, oklch(0.78 0.14 195 / 55%) 0, transparent 60%),
+      radial-gradient(1px 1px at 75% 45%, oklch(0.95 0.01 240 / 40%) 0, transparent 60%),
+      radial-gradient(1.5px 1.5px at 88% 78%, oklch(0.78 0.15 75 / 45%) 0, transparent 60%),
+      radial-gradient(1px 1px at 20% 88%, oklch(0.95 0.01 240 / 35%) 0, transparent 60%);
+    background-repeat: repeat;
+    background-size: 340px 340px;
+  }
+
+  .bg-hud-grid {
+    background-image:
+      linear-gradient(oklch(0.95 0.03 210 / 6%) 1px, transparent 1px),
+      linear-gradient(90deg, oklch(0.95 0.03 210 / 6%) 1px, transparent 1px);
+    background-size: 42px 42px;
+  }
+
+  .glow-primary {
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--color-primary) 70%, transparent),
+      0 0 20px -4px color-mix(in oklch, var(--color-primary) 65%, transparent);
+  }
+
+  .glow-ring {
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--color-ring) 80%, transparent),
+      0 0 14px -2px color-mix(in oklch, var(--color-ring) 70%, transparent);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 16px color-mix(in oklch, var(--color-primary) 55%, transparent);
   }
 }

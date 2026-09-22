@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 import type { Task } from "@/types/task";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface TaskFormProps {
   initialTask?: Pick<Task, "title" | "description">;
@@ -39,56 +45,49 @@ export default function TaskForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-3 rounded-md border border-black/[.08] p-4 dark:border-white/[.145]"
-    >
-      <div className="flex flex-col gap-1">
-        <label htmlFor="task-title" className="text-sm font-medium">
-          タイトル
-        </label>
-        <input
-          id="task-title"
-          type="text"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-          className="rounded-md border border-black/[.08] px-3 py-2 text-sm dark:border-white/[.145] dark:bg-black"
-        />
-      </div>
+    <Card className="border-primary/25 glow-ring">
+      <form onSubmit={handleSubmit}>
+        <CardContent className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="task-title" className="text-xs tracking-wider text-muted-foreground uppercase">
+              タイトル
+            </Label>
+            <Input
+              id="task-title"
+              type="text"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
+          </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="task-description" className="text-sm font-medium">
-          説明
-        </label>
-        <textarea
-          id="task-description"
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-          className="rounded-md border border-black/[.08] px-3 py-2 text-sm dark:border-white/[.145] dark:bg-black"
-        />
-      </div>
+          <div className="flex flex-col gap-1.5">
+            <Label
+              htmlFor="task-description"
+              className="text-xs tracking-wider text-muted-foreground uppercase"
+            >
+              説明
+            </Label>
+            <Textarea
+              id="task-description"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+            />
+          </div>
 
-      {validationError && (
-        <p className="text-sm text-red-600 dark:text-red-400">
-          {validationError}
-        </p>
-      )}
+          {validationError && (
+            <Alert variant="destructive">
+              <AlertDescription>{validationError}</AlertDescription>
+            </Alert>
+          )}
 
-      <div className="flex gap-2">
-        <button
-          type="submit"
-          className="rounded-md bg-zinc-900 px-3 py-2 text-sm text-white dark:bg-zinc-50 dark:text-black"
-        >
-          {submitLabel}
-        </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-md border border-black/[.08] px-3 py-2 text-sm dark:border-white/[.145]"
-        >
-          キャンセル
-        </button>
-      </div>
-    </form>
+          <div className="flex gap-2">
+            <Button type="submit">{submitLabel}</Button>
+            <Button type="button" variant="outline" onClick={onCancel}>
+              キャンセル
+            </Button>
+          </div>
+        </CardContent>
+      </form>
+    </Card>
   );
 }

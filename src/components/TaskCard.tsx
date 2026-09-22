@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { useDraggable } from "@dnd-kit/core";
+import { GripVertical, Pencil, Trash2 } from "lucide-react";
 import type { Task } from "@/types/task";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
 
 interface TaskCardProps {
   task: Task;
@@ -23,67 +28,78 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
     : undefined;
 
   return (
-    <div
+    <Card
       ref={setNodeRef}
       style={style}
-      className="flex flex-col gap-2 rounded-md border border-black/[.08] bg-white p-3 text-sm shadow-sm dark:border-white/[.145] dark:bg-zinc-900"
+      className={cn(
+        "border-border/60 transition-all",
+        transform && "glow-primary scale-[1.02] opacity-90",
+      )}
     >
-      <div className="flex items-start justify-between gap-2">
-        <p className="font-medium">{task.title}</p>
-        <button
-          type="button"
-          {...listeners}
-          {...attributes}
-          aria-label="ドラッグして移動"
-          className="cursor-grab px-1 text-zinc-400"
-        >
-          ⠿
-        </button>
-      </div>
-      {task.description && (
-        <p className="text-zinc-600 dark:text-zinc-400">{task.description}</p>
-      )}
+      <CardContent className="flex flex-col gap-2">
+        <div className="flex items-start justify-between gap-2">
+          <p className="text-sm font-medium">{task.title}</p>
+          <button
+            type="button"
+            {...listeners}
+            {...attributes}
+            aria-label="ドラッグして移動"
+            className="cursor-grab rounded-sm p-1 text-muted-foreground transition-colors hover:text-primary active:cursor-grabbing"
+          >
+            <GripVertical className="size-4" />
+          </button>
+        </div>
+        {task.description && (
+          <p className="text-sm text-muted-foreground">{task.description}</p>
+        )}
 
-      {isConfirmingDelete ? (
-        <div className="flex flex-col gap-2">
-          <p className="text-red-600 dark:text-red-400">
-            本当に削除しますか？
-          </p>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => onDelete(task.id)}
-              className="rounded-md bg-red-600 px-2 py-1 text-white"
-            >
-              削除する
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsConfirmingDelete(false)}
-              className="rounded-md border border-black/[.08] px-2 py-1 dark:border-white/[.145]"
-            >
-              キャンセル
-            </button>
+        {isConfirmingDelete ? (
+          <div className="flex flex-col gap-2">
+            <Alert variant="destructive">
+              <AlertDescription>本当に削除しますか？</AlertDescription>
+            </Alert>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                onClick={() => onDelete(task.id)}
+              >
+                削除する
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setIsConfirmingDelete(false)}
+              >
+                キャンセル
+              </Button>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => onEdit(task)}
-            className="rounded-md border border-black/[.08] px-2 py-1 dark:border-white/[.145]"
-          >
-            編集
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsConfirmingDelete(true)}
-            className="rounded-md border border-black/[.08] px-2 py-1 dark:border-white/[.145]"
-          >
-            削除
-          </button>
-        </div>
-      )}
-    </div>
+        ) : (
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => onEdit(task)}
+            >
+              <Pencil className="size-3.5" />
+              編集
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsConfirmingDelete(true)}
+            >
+              <Trash2 className="size-3.5" />
+              削除
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

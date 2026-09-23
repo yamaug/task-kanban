@@ -2,17 +2,14 @@
 
 import { useEffect, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
-import { DndContext } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
-import { Plus, Satellite } from "lucide-react";
-import TaskColumn from "@/components/TaskColumn";
+import TaskBoardHeader from "@/components/TaskBoardHeader";
+import TaskBoardSkeleton from "@/components/TaskBoardSkeleton";
+import AddTaskControl from "@/components/AddTaskControl";
+import TaskColumns from "@/components/TaskColumns";
 import TaskForm from "@/components/TaskForm";
 import { createTask, deleteTask, fetchTasks, updateTask } from "@/lib/tasks";
-import { TASK_STATUSES, TASK_STATUS_LABELS } from "@/types/task";
 import type { Task, TaskStatus } from "@/types/task";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function createOnDragEnd(
@@ -42,22 +39,6 @@ export function createOnDragEnd(
       setErrorMessage("タスクの移動に失敗しました");
     }
   };
-}
-
-function LoadingBoard() {
-  return (
-    <div className="flex flex-col gap-4 sm:flex-row">
-      {TASK_STATUSES.map((status) => (
-        <Card key={status} className="min-h-40 flex-1 gap-3">
-          <div className="flex flex-col gap-3 px-(--card-spacing)">
-            <Skeleton className="h-4 w-20" />
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-16 w-full" />
-          </div>
-        </Card>
-      ))}
-    </div>
-  );
 }
 
 export default function TaskBoard() {
@@ -128,12 +109,7 @@ export default function TaskBoard() {
     <main className="relative flex min-h-screen flex-col gap-4 overflow-hidden bg-starfield p-6">
       <div className="pointer-events-none absolute inset-0 bg-hud-grid opacity-40" />
 
-      <div className="relative flex items-center gap-2">
-        <Satellite className="size-5 text-primary" />
-        <h1 className="text-glow text-xl font-bold tracking-wide text-foreground">
-          タスクカンバン
-        </h1>
-      </div>
+      <TaskBoardHeader />
 
       {errorMessage && (
         <Alert variant="destructive" className="relative">
@@ -145,27 +121,17 @@ export default function TaskBoard() {
         <>
           <p className="relative text-sm text-muted-foreground">読み込み中...</p>
           <div className="relative">
-            <LoadingBoard />
+            <TaskBoardSkeleton />
           </div>
         </>
       ) : (
         <div className="relative flex flex-col gap-4">
-          {isAddFormOpen ? (
-            <TaskForm
-              submitLabel="追加"
-              onSubmit={handleAddTask}
-              onCancel={() => setIsAddFormOpen(false)}
-            />
-          ) : (
-            <Button
-              type="button"
-              onClick={() => setIsAddFormOpen(true)}
-              className="w-fit"
-            >
-              <Plus className="size-4" />
-              タスクを追加
-            </Button>
-          )}
+          <AddTaskControl
+            isOpen={isAddFormOpen}
+            onOpen={() => setIsAddFormOpen(true)}
+            onClose={() => setIsAddFormOpen(false)}
+            onSubmit={handleAddTask}
+          />
 
           {editingTask && (
             <TaskForm
@@ -176,20 +142,12 @@ export default function TaskBoard() {
             />
           )}
 
-          <DndContext onDragEnd={onDragEnd}>
-            <div className="flex flex-col gap-4 sm:flex-row">
-              {TASK_STATUSES.map((status) => (
-                <TaskColumn
-                  key={status}
-                  status={status}
-                  title={TASK_STATUS_LABELS[status]}
-                  tasks={tasks.filter((task) => task.status === status)}
-                  onEdit={setEditingTask}
-                  onDelete={handleDeleteTask}
-                />
-              ))}
-            </div>
-          </DndContext>
+          <TaskColumns
+            tasks={tasks}
+            onEdit={setEditingTask}
+            onDelete={handleDeleteTask}
+            onDragEnd={onDragEnd}
+          />
         </div>
       )}
     </main>

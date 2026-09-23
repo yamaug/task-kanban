@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { GripVertical, Pencil, Trash2 } from "lucide-react";
 import type { Task } from "@/types/task";
+import TaskCardDeleteConfirm from "@/components/TaskCardDeleteConfirm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 
 interface TaskCardProps {
@@ -54,29 +54,10 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
         )}
 
         {isConfirmingDelete ? (
-          <div className="flex flex-col gap-2">
-            <Alert variant="destructive">
-              <AlertDescription>本当に削除しますか？</AlertDescription>
-            </Alert>
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="destructive"
-                size="sm"
-                onClick={() => onDelete(task.id)}
-              >
-                削除する
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setIsConfirmingDelete(false)}
-              >
-                キャンセル
-              </Button>
-            </div>
-          </div>
+          <TaskCardDeleteConfirm
+            onConfirm={() => onDelete(task.id)}
+            onCancel={() => setIsConfirmingDelete(false)}
+          />
         ) : (
           <div className="flex gap-2">
             <Button
